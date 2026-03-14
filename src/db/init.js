@@ -3,10 +3,10 @@ let db = null;
 export async function initDB() {
   if (db) return db;
 
-  const sqlModule = await import('sql.js');
+  const sqlModule = await import('sql.js/dist/sql-wasm-browser.js');
   const initSqlJs = sqlModule.default ?? sqlModule;
   const SQL = await initSqlJs({
-    locateFile: (file) => `/${file}`,
+    locateFile: () => '/sql-wasm.wasm',
   });
 
   db = new SQL.Database();
