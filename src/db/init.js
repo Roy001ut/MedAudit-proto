@@ -3,13 +3,13 @@ let db = null;
 export async function initDB() {
   if (db) return db;
 
-  const SQL = await import('sql.js').then((m) => m.default);
-  const sqlPromise = SQL({
+  const sqlModule = await import('sql.js');
+  const initSqlJs = sqlModule.default ?? sqlModule;
+  const SQL = await initSqlJs({
     locateFile: (file) => `/${file}`,
   });
 
-  const sqlInstance = await sqlPromise;
-  db = new sqlInstance.Database();
+  db = new SQL.Database();
 
   db.run(`
     CREATE TABLE IF NOT EXISTS lab_results (
